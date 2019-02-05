@@ -1,0 +1,43 @@
+Setelah selesai Install raspberry PI langkah selanjtnya adalah set ethernet raspberry IP agar memiliki IP, bisa dengan cara DHCP (raspberry PI disambungkan langsung dengan router) atau secara manual IP , misalkan IP 192.168.0.100
+
+=>backup file
+sudo cp /etc/network/interfaces /etc/network/interfaces.sav
+=>edit file
+sudo vi /etc/network/interfaces
+
+semula ada tulisan sbb
+iface eth0 inet dhcp
+
+lalu ketik menjadi sbb
+
+#iface eth0 inet dhcp
+auto lo
+iface lo inet loopback
+auto eth0
+iface eth0 inet static
+address 192.168.0.100  
+#your gateway IP
+gateway 192.168.0.1
+netmask 255.255.255.0
+network 192.168.0.0
+broadcast 192.168.0.255
+
+
+sudo ifdown eth0 && sudo ifup eth0
+
+sudo /etc/init.d/networking restart
+sudo /etc/init.d/networking reload
+
+ langkah-langkah VNC server pada raspberry PI:
+ketik 
+sudo apt-get install tightvncserver
+setelah selesai ketik
+vncserver :1 -geometry 1366x768 -depth 24
+
+==>This creates a session on display 0 – keep a note of this as you will need it when you connect.
+* vncserver :membuat layar desktop melalui VNC
+*:1 nomor sessi /nomor layar .bisa langsung banyak layar sekaligus dengan index terurut 0,1,2 dst jika tidak dituliskan
+* -geometry 1366x768 adalah resolusi layar yang diinginkan , jika tidak dituliskan maka secara automatis sistem akan mengambil konfigurasi resolusi terendah
+* -depth 24 adalah kedalaman warna (bit).makin tinggi maka akan semakin tajam warna yang dihasilkannya (max 32 bit)
+
+
